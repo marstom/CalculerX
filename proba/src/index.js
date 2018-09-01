@@ -1,49 +1,34 @@
-console.log('index.js')
+console.log('Calclul X pro')
 
 
-const calc = (...numbers) => {
-    let sum = 0
-    numbers.forEach((n) => {
-        sum += n
-    })
-    return sum
+const displayEl = document.querySelector('#display')
+console.log(displayEl)
+
+const displayChar = (char, type) => {
+    const digitEl = document.createElement('div')
+    digitEl.classList.add('digit')
+    if(type !== 'digit'){
+        digitEl.classList.add(type)
+    }
+    digitEl.textContent = char
+    displayEl.appendChild(digitEl)
 }
 
-console.log(calc(2,3,4,3,2,3,4,3,12))
-
-const a = (a, b) => {
-    console.log(`twos ${a} ${b}`)
+const addDigit = (digit) => {
+    displayChar(digit, 'digit')
 }
 
-const ar = [1,2]
-
-a(...ar) /// like * in python !
-
-
-// object spread syntax, lik ** i n  p y t h o n !! (require special plugin to babel)
-let house  = {
-    rooms:2,
-    beds:4
+const addSign = (s) => {
+    displayChar(s, 'sign')
 }
 
-// let pension = {
-    // ...house
-// }
-
-const todo = {
-    id: 'asdfdasf',
-    text: 'pay texes',
-    completed:true,
-    details: {juice:true, phun:true, fal:false}
+// r-result ok-bool
+const addResult = (r, ok) => {
+    displayChar('=', 'digit')
+    ok ? displayChar(r, 'ok'): displayChar(r, 'nok')
 }
 
-// const text = todo.text
-const { text:tex, completed:com, details:oth='no details provided' } = todo // = alternative text
-
-console.log(tex)
-console.log(com)
-console.log(oth)
-
-const ages = [12, 32, 43]
-const [aa,bb,cc] = ages
-console.log(aa,bb,cc)
+addDigit(3)
+addSign('+')
+addDigit(3)
+addResult(6, true)
