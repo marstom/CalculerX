@@ -1,3 +1,7 @@
+/*
+TODO child append before action
+
+*/
 console.log('Calclul X pro')
 
 
@@ -39,15 +43,24 @@ const addResult = (r, ok) => {
 // returns list of '2' '+' '3' '23'
 // and eval result
 
+const gameState = {
+    score: 0,
+    questions: 5
+}
+
 class CalclulX {
-    constructor(expr) {
+     
+    constructor() {
+    }
+
+    set task(expr){
         this.result = this._parseExpression(expr)
     }
 
     // draw formula on te page
     writeFormulaOnPage() {
         this.result.array.forEach((el) => {
-            if (['+', '-'].includes(el)) {
+            if (['+', '-', '*', '/', '^', '(', ')'].includes(el)) {
                 addSign(el)
             } else {
                 addDigit(el)
@@ -83,12 +96,16 @@ class CalclulX {
 
 
 // good result
-const calcul = new CalclulX('2 + 32 + 7')
+const calcul = new CalclulX()
+calcul.task = '8 * ( 2 + 12 + 11 ) - 72'
 calcul.writeFormulaOnPage()
-calcul.displayUserResult(41)
+calcul.displayUserResult(128)
 
 newLine()
+calcul.task = '2 + 2'
+calcul.writeFormulaOnPage()
+calcul.displayUserResult(11)
 
-const calcul2 = new CalclulX('2 + 32 + 7')
-calcul2.writeFormulaOnPage()
-calcul2.displayUserResult(21)
+newLine()
+calcul.task = '2 + 2'
+calcul.writeFormulaOnPage()

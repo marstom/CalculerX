@@ -38,8 +38,9 @@ body{
 }
 
 .sign{
+    width: 19px;
     background-color: #008dc5;
-    color: white;
+    color: rgb(229, 255, 0);
     font-size: 33px;
 }
 
