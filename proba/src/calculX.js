@@ -18,6 +18,7 @@ class CalculX {
 
     set task(expr){
         this.result = this._parseExpression(expr)
+        this.writeFormulaOnPage()
     }
 
     // draw formula on te page
