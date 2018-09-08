@@ -81,37 +81,54 @@ Vue.component('math-formula', {
 
 })
 
+class SelectFormula{
+    constructor(){
+        this.formulas = [
+            '2 + 12 + 2',
+            '3 - 12 + 3',
+            '25 + 11 - 16',
+            '3 * ( 2 - 3 )',
+            '2 + 11 - 8',
+            '2 + 2',
+            '16 + 23 + 129',
+        ]
+    }
+
+    getRandomFormula(){
+        const randf = Math.floor(Math.random() * this.formulas.length)
+        return this.formulas[randf]
+    }
+
+}
+
 new Vue({
     el: '#app',
     data: {
         ha: 'tomek',
         result: null,
-        currentFormula: '2 + 1',
+        currentFormula: '',
         showResult: false,
         goodResult: false,
         formulaItems: [
-            {
-                formula: "2 + 5 + 11",
-                result: 12
-            },
-            {
-                formula: "3 + 7",
-                result: 10
-            },
         ]
     },
+    mounted(){
+        this.sf = new SelectFormula()
+        this.currentFormula = this.sf.getRandomFormula()
+    },
+
     methods: {
         getResult() {
             return this.result
         },
 
         answerButton() {
-            this.showResult = true
+            // this.showResult = true
             this.formulaItems.unshift({
                 formula: this.currentFormula,
                 result: this.result
             })
-            console.log(this.result)
+            this.currentFormula = this.sf.getRandomFormula()
         }
 
     }
