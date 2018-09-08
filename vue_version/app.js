@@ -81,8 +81,8 @@ Vue.component('math-formula', {
 
 })
 
-class SelectFormula{
-    constructor(){
+class SelectFormula {
+    constructor() {
         this.formulas = [
             '2 + 12 + 2',
             '3 - 12 + 3',
@@ -94,7 +94,7 @@ class SelectFormula{
         ]
     }
 
-    getRandomFormula(){
+    getRandomFormula() {
         const randf = Math.floor(Math.random() * this.formulas.length)
         return this.formulas[randf]
     }
@@ -112,7 +112,7 @@ new Vue({
         formulaItems: [
         ]
     },
-    mounted(){
+    mounted() {
         this.sf = new SelectFormula()
         this.currentFormula = this.sf.getRandomFormula()
     },
@@ -124,11 +124,18 @@ new Vue({
 
         answerButton() {
             // this.showResult = true
-            this.formulaItems.unshift({
-                formula: this.currentFormula,
-                result: this.result
-            })
-            this.currentFormula = this.sf.getRandomFormula()
+            if (this.result) {
+                this.formulaItems.unshift({
+                    formula: this.currentFormula,
+                    result: this.result
+                })
+                if (this.formulaItems.length > 4) {
+                    this.formulaItems.pop()
+                }
+                this.currentFormula = this.sf.getRandomFormula()
+                this.result = null;
+
+            }
         }
 
     }

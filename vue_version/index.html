@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -16,10 +17,14 @@
         <h1>Calcul X</h1>
         <div>Calculer X this is official 0.0.1a version:</div>
 
+        <a href="options.html" class="options">
+           <i class="fa fa-file-text-o" aria-hidden="true"></i>
+        </a>
+
         <div class="ans">
-            <form>
+            <form v-on:submit.prevent>
                 <input type="text" id="result" v-model="result">
-                <input type="button" value="ok" @click="answerButton">
+                <input type="submit" value="ok" @click="answerButton" @submit="answerButton">
                 <label>Show good result</label> <input type="checkbox" v-model="goodResult">
             </form>
         </div>
