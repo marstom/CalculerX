@@ -1,7 +1,7 @@
 Vue.component('my-formula', {
     template: `
         <div>
-            <input class="oper" :value="value.formula" type="text">
+            <input class="oper" :value="value.formula" type="text" v-model="value.formula">
             <input @click="performSave" type="button" value="Save" class="bsave">
             <input @click="performDelete"type="button" value="X" class="bdelete">
         </div>
@@ -23,11 +23,14 @@ Vue.component('my-formula', {
             console.log(this.value.id);
             axios.delete(`http://localhost:3000/calculer/${this.value.id}`)
             .then(response => {
-
+                console.log(response);
             })
-            
-
-
+        },
+        performSave(){
+            axios.patch(`http://localhost:3000/calculer/${this.value.id}`, {formula:this.value.formula})
+            .then(response => {
+                console.log(response);
+            })
         }
     }
 })

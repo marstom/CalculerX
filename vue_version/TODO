@@ -1,0 +1,5 @@
+ - on write change color to red
+
+ - on save change color to green
+
+ - solve problem with waiting for initial data page load
