@@ -86,12 +86,32 @@ new Vue({
     data: {
         ha: 'tomek',
         result: null,
+        currentFormula: '2 + 1',
         showResult: false,
-        goodResult: false
+        goodResult: false,
+        formulaItems: [
+            {
+                formula: "2 + 5 + 11",
+                result: 12
+            },
+            {
+                formula: "3 + 7",
+                result: 10
+            },
+        ]
     },
     methods: {
         getResult() {
             return this.result
+        },
+
+        answerButton() {
+            this.showResult = true
+            this.formulaItems.unshift({
+                formula: this.currentFormula,
+                result: this.result
+            })
+            console.log(this.result)
         }
 
     }
