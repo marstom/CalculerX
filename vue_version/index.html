@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <div id="app">
+
+        <h1>Calcul X</h1>
+        <div>Calculer X this is official 0.0.1a version:</div>
+
+        <div class="ans">
+            <form>
+                <input type="text" id="result" v-model="result">
+                <input type="button" value="ok" @click="showResult">
+            </form>
+        </div>
+        <math-formula formula="2 + 2 + 2 + 2" :result="result" :show="showResult"></math-formula>
+
+        <div class="digit">4</div>
+        <div class="digit sign">+</div>
+        <div class="digit">4</div>
+        <div class="digit sign">=</div>
+    </div>
+
+
+    <script src="app.js"></script>
+</body>
+
+</html>
