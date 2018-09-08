@@ -8,55 +8,89 @@ Vue.component('math-formula', {
         <div :class="[{digit:true, sign:isDigit(e)}]">{{ e }}</div>
     </span>
 
-    <span v-if="result !== ''">
+    <span v-if="showResult()">
         <div :class="[{digit:true, ok:isValidResult, nok:!isValidResult}]">{{ result }}</div>
+    </span>
+    <span v-if="showResult() && goodresult && !isValidResult">
+        <div class="digit ok">{{ answer }}</div>
     </span>
     </div>
     `,
-    props: ['k', 'formula', 'result'],
-    data(){
-        return {
+    props: {
+        k: {
+            type: Boolean,
+            default: false
+        },
+        formula: {
+            type: String,
+            default: ''
+        },
+        result: {
+            type: String,
+            default: ''
+        },
+        show: {
+            type: Boolean,
+            default: false
+        },
+        goodresult: {
+            type: Boolean,
+            default: false
         }
     },
-    methods:{
-        isDigit(n){
+    data() {
+        return {
+            answer: null
+        }
+    },
+    methods: {
+        isDigit(n) {
             if (isNaN(parseInt(n))) {
                 return true
             }
             return false
         },
 
-        showResult(){
-            return eval(this.formula)
+        setAnswer() {
+            this.answer = eval(this.formula)
+            return this.answer
+        },
+        showResult() {
+            this.answer = eval(this.formula)
+            let res = ((this.result !== '') && (this.show === true))
+            return res
         }
+
     },
-    computed:{
-        els(){
+    computed: {
+        els() {
             const formula = this.formula.split(' ')
             formula.push('=')
             return formula
         },
 
-        isValidResult(){
-            if(this.showResult() === parseInt(this.result)){
+        isValidResult() {
+            if (this.setAnswer() === parseInt(this.result)) {
                 return true
             }
             return false
 
-        }
+        },
+
     }
 
-  })
+})
 
 new Vue({
-    el:'#app',
-    data:{
+    el: '#app',
+    data: {
         ha: 'tomek',
         result: null,
-        showResult: false
+        showResult: false,
+        goodResult: false
     },
     methods: {
-        getResult(){
+        getResult() {
             return this.result
         }
 

@@ -19,10 +19,13 @@
         <div class="ans">
             <form>
                 <input type="text" id="result" v-model="result">
-                <input type="button" value="ok" @click="showResult">
+                <input type="button" value="ok" @click="showResult = true">
+                <label>Show good result</label> <input type="checkbox" v-model="goodResult">
             </form>
         </div>
-        <math-formula formula="2 + 2 + 2 + 2" :result="result" :show="showResult"></math-formula>
+        <math-formula formula="2 + 2 + 2 + 2" :result="result" :show="showResult" :goodresult="goodResult"></math-formula>
+        <math-formula formula="2 + 2 + 2 + 2" result="8" :show="Boolean(1)" :goodresult="Boolean(1)"></math-formula>
+        <math-formula formula="2 + 2 + 2 + 2" :result="result" :show="showResult" :goodresult="goodResult"></math-formula>
 
         <div class="digit">4</div>
         <div class="digit sign">+</div>
