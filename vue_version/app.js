@@ -83,20 +83,32 @@ Vue.component('math-formula', {
 
 class SelectFormula {
     constructor() {
-        this.formulas = [
-            '2 + 12 + 2',
-            '3 - 12 + 3',
-            '25 + 11 - 16',
-            '3 * ( 2 - 3 )',
-            '2 + 11 - 8',
-            '2 + 2',
-            '16 + 23 + 129',
-        ]
+        // this.formulas = [
+        //     '2 + 12 + 2',
+        //     '3 - 12 + 3',
+        //     '25 + 11 - 16',
+        //     '3 * ( 2 - 3 )',
+        //     '2 + 11 - 8',
+        //     '2 + 2',
+        //     '16 + 23 + 129',
+        // ]
+        this.formulas = [{
+            id:0,
+            formula: "2 + 1"
+        }]
+        this.getFormulasHttp()
+    }
+
+    getFormulasHttp(){
+        axios.get('http://localhost:3000/calculer')
+        .then(response => {
+            this.formulas = response.data
+        })
     }
 
     getRandomFormula() {
         const randf = Math.floor(Math.random() * this.formulas.length)
-        return this.formulas[randf]
+        return this.formulas[randf].formula
     }
 
 }

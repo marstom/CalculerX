@@ -1,0 +1,29 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "calculer": [
+    {
+      "formula": "11 + 12 + 22",
+      "id": 1
+    },
+    {
+      "formula": "5 + 4 + 6 + 2 + 11 + 444 + 22",
+      "id": 2
+    }
+  ]
+}

@@ -11,24 +11,23 @@
 </head>
 
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
     <script src="https://npmcdn.com/vue/dist/vue.js"></script>
     <div id="app">
         <h1> {{ title }} </h1>
-        <a href="" class="back"><--- Back</a>
+        <a href="/" class="back"><--- Back</a>
 
-        <form action="post" v-on:submit.prevent>
-            <input class="oper" type="text">
-            <input type="button" value="+">
-        </form>
+                <form action="post" v-on:submit.prevent @submit="submit">
+                    <input class="oper" type="text" v-model="formula">
+                    <input type="submit" value="+">
+                </form>
 
-        <hr>
+                <hr>
 
-        <div>
-            <input class="oper"  type="text">
-            <input type="button" value="Save" class="bsave">
-            <input type="button" value="X" class="bdelete">
-        </div>
-
+                <my-formula value="2 + 2"></my-formula>
+                <div v-for="formula in listOfFormulas">
+                    <my-formula :value="formula"></my-formula>
+                </div>
     </div>
     <script src="options.js"></script>
 </body>
