@@ -23,8 +23,8 @@
                 </form>
 
                 <hr>
-                <div v-for="formula in listOfFormulas">
-                    <my-formula :value="formula"></my-formula>
+                <div v-for="formula in listOfFormulas"  >
+                    <my-formula  @deletedevent="refreshFormulas" :value="formula"></my-formula>
                 </div>
     </div>
     <script src="options.js"></script>

@@ -1,14 +1,17 @@
+const eventBus = new Vue();
+
 Vue.component('my-formula', {
     template: `
         <div>
-            <input class="oper" :value="value.formula" type="text" v-model="value.formula">
-            <input @click="performSave" type="button" value="Save" class="bsave">
+            <input :class="[{oper:true, modified:modified}]" type="text" v-model="value.formula" @change="modified = true">
+            <input @click="performSave" type="button" :value="modified?['Save*']:['Save']" class="bsave">
             <input @click="performDelete"type="button" value="X" class="bdelete">
         </div>
     `,
     data() {
         return {
-            content: ''
+            content: '',
+            modified: false
         }
     },
     props: ['value',],
@@ -21,19 +24,36 @@ Vue.component('my-formula', {
         performDelete() {
             console.log('delete');
             console.log(this.value.id);
+            var vm = this
             axios.delete(`http://localhost:3000/calculer/${this.value.id}`)
             .then(response => {
                 console.log(response);
+                vm.$emit('deletedevent')
             })
         },
         performSave(){
             axios.patch(`http://localhost:3000/calculer/${this.value.id}`, {formula:this.value.formula})
             .then(response => {
                 console.log(response);
+                this.modified = false
             })
+        },
+        setModified(){
+            this.modified = true
+        },
+        hello(){
+            console.log('event trigger et my-formula');
+            
         }
-    }
+    },
 })
+
+
+const splitFormula = (formula) => {
+    formula = formula.trim()
+    let re = /\+|\-\*|\//
+    return formula
+}
 
 new Vue({
     el: '#app',
@@ -64,12 +84,17 @@ new Vue({
         },
 
         postFormula(){
-            axios.post('http://localhost:3000/calculer', {formula: this.formula})
+            const f = splitFormula(this.formula)
+            axios.post('http://localhost:3000/calculer', {formula: f})
             .then(response => {
                 console.log(response)
                 this.refreshFormulas()
                 }
             )
+        },
+        hello(){
+            console.log('log from root');
+            
         }
 
     },

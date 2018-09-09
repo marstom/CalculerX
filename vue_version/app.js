@@ -53,10 +53,12 @@ Vue.component('math-formula', {
 
         setAnswer() {
             this.answer = eval(this.formula)
+            this.answer = Math.round(this.answer * 1000) / 1000
             return this.answer
         },
         showResult() {
             this.answer = eval(this.formula)
+            this.answer = Math.round(this.answer * 1000) / 1000
             let res = ((this.result !== '') && (this.show === true))
             return res
         }
@@ -64,7 +66,16 @@ Vue.component('math-formula', {
     },
     computed: {
         els() {
-            const formula = this.formula.split(' ')
+            // const formula = this.formula.split(' ')
+            // const formula = this.formula.split(re)
+            let formula = this.formula
+            formula = formula.replace(/\+/g, ' + ')
+            formula = formula.replace(/\-/g, ' - ')
+            formula = formula.replace(/\*/g, ' * ')
+            formula = formula.replace(/\//g, ' / ')
+            formula = formula.replace(/\(/g, '( ')
+            formula = formula.replace(/\)/g, ' )')
+            formula = formula.split(' ')
             formula.push('=')
             return formula
         },
@@ -94,7 +105,7 @@ class SelectFormula {
         // ]
         this.formulas = [{
             id:0,
-            formula: "2 + 1"
+            formula: "2+1"
         }]
         this.getFormulasHttp()
     }
