@@ -43,7 +43,15 @@ cors = CORS(app, resources={r'/user': {'origins':'*'}})
 
 class Calculer(Resource):
     def get(self):
-        return calc, 200
+        calculs = []
+        for formula in session.query(Formula):
+            calculs.append(
+                {
+                    'id': formula.id,
+                    'formula': formula.formula
+                }
+            )
+        return calculs, 200
 
     def post(self):
         global id_
