@@ -1,33 +1,30 @@
-import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-Base = declarative_base()
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-# engine = create_engine('sqlite:///:memory:', echo=True)
-engine = create_engine('sqlite:///baz.sql', echo=False)
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+db = SQLAlchemy(app)
 
-class Formula(Base):
+
+class Formula(db.Model):
     __tablename__ = 'formulas'
-    id = Column(Integer, primary_key=True)
-    formula = Column(String)
+    id = db.Column(db.Integer, primary_key=True)
+    formula = db.Column(db.String)
 
     def __repr__(self):
         return '{} {}'.format(self.id, self.formula)
 
 
 if __name__ == '__main__':
-    from sqlalchemy.orm import sessionmaker
-    Base.metadata.create_all(engine)
+    db.create_all()
 
-    Session = sessionmaker()
-    Session.configure(bind=engine)
-    session = Session()
 
     f1 = Formula(formula='2+2')
     f2 = Formula(formula='4+4')
-    session.add(f1)
-    session.add(f2)
-    session.commit()
 
-    for ins in session.query(Formula):
+    db.session.add(f1)
+    db.session.add(f2)
+    db.session.commit()
+
+    for ins in Formula.query.all():
         print(ins.formula, ins.id)

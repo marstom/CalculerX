@@ -12,15 +12,10 @@ http delete http://127.0.0.1:5000/calculer/1
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
-from models import *
+# from models import Formula
+from flask_sqlalchemy import SQLAlchemy
 
 from sqlalchemy.orm import sessionmaker
-
-Base.metadata.create_all(engine)
-
-Session = sessionmaker()
-Session.configure(bind=engine)
-session = Session()
 
 
 calc = [
@@ -39,12 +34,24 @@ id_ = 3
 app = Flask(__name__)
 api = Api(app)
 cors = CORS(app, resources={r'/user': {'origins':'*'}})
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+db = SQLAlchemy(app)
+
+
+
+class Formula(db.Model):
+    __tablename__ = 'formulas'
+    id = db.Column(db.Integer, primary_key=True)
+    formula = db.Column(db.String)
+
+    def __repr__(self):
+        return '{} {}'.format(self.id, self.formula)
 
 
 class Calculer(Resource):
     def get(self):
         calculs = []
-        for formula in session.query(Formula):
+        for formula in Formula.query.all():
             calculs.append(
                 {
                     'id': formula.id,
@@ -67,13 +74,21 @@ class Calculer(Resource):
             
             })
         id_+=1
+        formula = Formula(formula=args['formula'])
+        db.session.add(formula)
+        db.session.commit()
 
-        return calc, 201
+
+        return {'id': formula.id, 'formula': formula.formula}, 201
 
 class CalculerOne(Resource):
     def delete(self, id):
         print(id)
         self.pop_from_list(calc, int(id))
+        formula = Formula.query.get(int(id))
+        print(formula)
+        db.session.delete(formula)
+        db.session.commit()
         return calc, 201
 
     def patch(self, id):
