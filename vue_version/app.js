@@ -81,7 +81,7 @@ Vue.component('math-formula', {
         },
 
         isValidResult() {
-            if (this.setAnswer() === parseInt(this.result)) {
+            if (this.setAnswer()*1000 === parseInt(this.result*1000)) {
                 return true
             }
             return false

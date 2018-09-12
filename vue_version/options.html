@@ -8,6 +8,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -16,6 +17,15 @@
     <div id="app">
         <h1> {{ title }} </h1>
         <a href="/" class="back"><--- Back</a>
+                <h3>Select workbook:</h3>
+                <div>
+                    <input type="radio" name="a" id="">
+                    <input type="radio" name="a" id="">
+                    <input type="radio" name="a" id="">
+                </div>
+                <h3><span><i class="fa fa-plus-square-o add" aria-hidden="true"></i></span></h3>
+
+
 
                 <form action="post" v-on:submit.prevent @submit="submit">
                     <input class="oper" type="text" v-model="formula">
@@ -23,8 +33,8 @@
                 </form>
 
                 <hr>
-                <div v-for="formula in listOfFormulas"  >
-                    <my-formula  @deletedevent="refreshFormulas" :value="formula"></my-formula>
+                <div v-for="formula in listOfFormulas">
+                    <my-formula @deletedevent="refreshFormulas" :value="formula"></my-formula>
                 </div>
     </div>
     <script src="options.js"></script>

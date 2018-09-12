@@ -3,4 +3,4 @@ package-lock.json
 bundle.js
 **/*.bundle.js
 **/bundle.js
-
+.idea/

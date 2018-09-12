@@ -85,6 +85,13 @@ input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
     margin-bottom: 10px;
 }
 
+.add {
+    color: rgb(35, 99, 35);
+}
+
+.add:hover {
+    color: rgb(60, 173, 60);
+}
 
 .options{
     color: rebeccapurple;
