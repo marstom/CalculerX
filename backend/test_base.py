@@ -26,12 +26,9 @@ def test_db_create():
     Base.metadata.drop_all(engine)
 
 def test_db_create2():
-    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.orm import sessionmaker, Session
     Base.metadata.create_all(engine)
-
-    Session = sessionmaker()
-    Session.configure(bind=engine)
-    session = Session()
+    session = Session(engine)
 
     session.add_all([
         Formula(formula='234+333'),

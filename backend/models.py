@@ -1,10 +1,9 @@
 import sqlalchemy
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
+
 Base = declarative_base()
 
-# engine = create_engine('sqlite:///:memory:', echo=True)
-engine = create_engine('sqlite:///baz.sql', echo=False)
 
 class Formula(Base):
     __tablename__ = 'formulas'
@@ -17,6 +16,7 @@ class Formula(Base):
 
 if __name__ == '__main__':
     from sqlalchemy.orm import sessionmaker
+    engine = create_engine('sqlite:///baz.sql', echo=False)
     Base.metadata.create_all(engine)
 
     Session = sessionmaker()
