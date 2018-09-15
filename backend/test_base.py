@@ -1,16 +1,14 @@
-from .models import *
+from .models import Base, Formula
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 from unittest import mock
 import pytest
 
 engine = create_engine('sqlite:///:memory:', echo=False)
 
 def test_db_create():
-    from sqlalchemy.orm import sessionmaker
     Base.metadata.create_all(engine)
-
-    Session = sessionmaker()
-    Session.configure(bind=engine)
-    session = Session()
+    session = scoped_session(sessionmaker(bind=engine))
 
     f1 = Formula(formula='2+2')
     f2 = Formula(formula='4+4')
@@ -24,11 +22,12 @@ def test_db_create():
     print(session.query(Formula).get(1).formula)
 
     Base.metadata.drop_all(engine)
+    session.remove()
 
 def test_db_create2():
-    from sqlalchemy.orm import sessionmaker, Session
     Base.metadata.create_all(engine)
-    session = Session(engine)
+    session = scoped_session(sessionmaker(bind=engine))
+
 
     session.add_all([
         Formula(formula='234+333'),
@@ -36,14 +35,13 @@ def test_db_create2():
         Formula(formula='411+31113'),
     ])
 
-    # second = session.query(Formula).filter_by(id=2).one()
     second = session.query(Formula).get(2)
     session.delete(second)
     session.commit()
     cnt = session.query(Formula).count()
-    # print(second)
     assert cnt == 2
 
 
     Base.metadata.drop_all(engine)
+    session.remove()
 
