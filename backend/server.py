@@ -12,15 +12,25 @@ http delete http://127.0.0.1:5000/calculer/1
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
-from models import Base, Formula
+from models import Base, Formula, initialize
 
 from sqlalchemy.orm import sessionmaker, Session, scoped_session
 from sqlalchemy import create_engine
+import os
+from database import init_db
 
 
-engine = create_engine('sqlite:///baz.sql', echo=False)
+os.environ['my_db'] = 'sqlite:///baz.db'
+# os.environ['my_db'] = 'sqlite:///ttt.db'
+# os.environ['my_db'] ='sqlite:///:memory:'
+
+engine = create_engine(os.environ['my_db'], echo=False)
+
 # must be scoped session otherwise not working
 session = scoped_session(sessionmaker(bind=engine))
+init_db()
+
+
 
 
 calc = [

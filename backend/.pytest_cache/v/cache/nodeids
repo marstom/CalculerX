@@ -1,4 +1,3 @@
 [
-  "test_base.py::test_db_create",
-  "test_base.py::test_db_create2"
+  "api_tests/test_on_empty_db.tavern.yaml::Empty db, create and watch"
 ]

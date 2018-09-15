@@ -1,0 +1,3 @@
+{
+  "test_on_empty_db.tavern.yaml::Empty db, create and watch": true
+}

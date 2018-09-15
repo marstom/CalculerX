@@ -14,9 +14,10 @@ class Formula(Base):
         return '{} {}'.format(self.id, self.formula)
 
 
-if __name__ == '__main__':
+def initialize(name):
+    
     from sqlalchemy.orm import sessionmaker
-    engine = create_engine('sqlite:///baz.sql', echo=False)
+    engine = create_engine(name, echo=False)
     Base.metadata.create_all(engine)
 
     Session = sessionmaker()
@@ -31,3 +32,19 @@ if __name__ == '__main__':
 
     for ins in session.query(Formula):
         print(ins.formula, ins.id)
+
+def clear(name):
+    from sqlalchemy.orm import sessionmaker
+    engine = create_engine(name, echo=False)
+    Base.metadata.create_all(engine)
+
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+
+    Base.metadata.drop_all(engine)
+    Base.metadata.drop_all(engine)Base.metadata.create_all(engine)
+
+
+if __name__ == '__main__':
+    initialize('sqlite:///baz.db')
