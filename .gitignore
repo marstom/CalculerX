@@ -5,3 +5,6 @@ bundle.js
 **/bundle.js
 .idea/
 *.sql
+__pycache__/
+/**/__pycache__/
+*.py[cod]

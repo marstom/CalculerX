@@ -47,7 +47,7 @@ def test_db_create2(database_create_and_utilize):
 
 def test_db_relation(database_create_and_utilize):
     session = database_create_and_utilize
-    
+
     # create workbook
     wb = Workbook(name='Pierwszy')
     session.add(wb)

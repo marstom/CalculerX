@@ -31,21 +31,6 @@ session = scoped_session(sessionmaker(bind=engine))
 init_db()
 
 
-
-
-calc = [
-        {
-            'id':1,
-            'formula':'2+3+4',
-        },
-        {
-            'id':2,
-            'formula':'3+4+5',
-        },
-]
-
-id_ = 3
-
 app = Flask(__name__)
 api = Api(app)
 cors = CORS(app, resources={r'/user': {'origins':'*'}})
