@@ -9,41 +9,6 @@ from calculer.models import Formula, Workbook
 from .serializers import *
 
 
-def calculer(request):
-    if request.method == 'GET':
-        formulas = Formula.objects.all()
-        serializer = FormulaSerializer(formulas, many=True)
-        return JsonResponse(serializer.data, safe=False)
-    if request.method == 'POST':
-        if Workbook.objects.count() == 0:
-            Workbook.objects.create(name="default")
-        wb = Workbook.objects.first()
-
-        formula = request.POST.get('formula')
-        fm = Formula.objects.create(formula=formula, workbook=wb)
-        print(fm)
-        serializer = FormulaSerializer(fm, many=False)
-        return JsonResponse(status.HTTP_201_CREATED, safe=False)
-    return HttpResponse('tomek')
-
-def calculer_del(request, id):
-    """ delete or change particular formula """
-    if request.method == 'DELETE':
-        formula = Formula.objects.get(pk=id)
-        formula.delete()
-        serializer = FormulaSerializer(formula, many=False)
-        return HttpResponse(status.HTTP_204_NO_CONTENT)
-    if request.method == 'PATCH':
-        formula = Formula.objects.get(pk=id)
-        requestdata = QueryDict(request.body)
-        formula.formula = requestdata.get('formula')
-        formula.save()
-        serializer = FormulaSerializer(formula, many=False)
-        return HttpResponse(status.HTTP_200_OK)
-
-    return HttpResponse(status.HTTP_400_BAD_REQUEST)
-
-
 def workbook_create(request):
     """ New empty workbook creation """
     if request.method == 'POST':
