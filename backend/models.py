@@ -1,17 +1,26 @@
 import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+class Workbook(Base):
+    __tablename__ = 'workbook'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    formulas = relationship('Formula')
 
 class Formula(Base):
-    __tablename__ = 'formulas'
+    __tablename__ = 'formula'
     id = Column(Integer, primary_key=True)
     formula = Column(String)
+    workbook_id = Column(Integer, ForeignKey('workbook.id'), default=0)
 
     def __repr__(self):
         return '{} {}'.format(self.id, self.formula)
+
+
 
 
 def initialize(name):
@@ -43,7 +52,7 @@ def clear(name):
     session = Session()
 
     Base.metadata.drop_all(engine)
-    Base.metadata.drop_all(engine)Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine)
 
 
 if __name__ == '__main__':

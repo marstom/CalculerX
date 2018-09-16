@@ -1,4 +1,4 @@
-from .models import Base, Formula
+from .models import Base, Formula, Workbook
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from unittest import mock
@@ -6,9 +6,16 @@ import pytest
 
 engine = create_engine('sqlite:///:memory:', echo=False)
 
-def test_db_create():
+@pytest.fixture
+def database_create_and_utilize():
     Base.metadata.create_all(engine)
     session = scoped_session(sessionmaker(bind=engine))
+    yield session
+    Base.metadata.drop_all(engine)
+    session.remove()
+
+def test_db_create(database_create_and_utilize):
+    session = database_create_and_utilize
 
     f1 = Formula(formula='2+2')
     f2 = Formula(formula='4+4')
@@ -21,13 +28,9 @@ def test_db_create():
 
     print(session.query(Formula).get(1).formula)
 
-    Base.metadata.drop_all(engine)
-    session.remove()
 
-def test_db_create2():
-    Base.metadata.create_all(engine)
-    session = scoped_session(sessionmaker(bind=engine))
-
+def test_db_create2(database_create_and_utilize):
+    session = database_create_and_utilize
 
     session.add_all([
         Formula(formula='234+333'),
@@ -42,6 +45,21 @@ def test_db_create2():
     assert cnt == 2
 
 
-    Base.metadata.drop_all(engine)
-    session.remove()
+def test_db_relation(database_create_and_utilize):
+    session = database_create_and_utilize
+    
+    # create workbook
+    wb = Workbook(name='Pierwszy')
+    session.add(wb)
+    session.commit()
+    print(wb.id)
+    del wb
+
+    wb = session.query(Workbook).get(1)
+    wb.formulas.append(Formula(formula='22+11+3'))
+    wb.formulas.append(Formula(formula='41+21+35'))
+    wb.formulas.append(Formula(formula='21+21+25'))
+    session.commit()
+
+    print(wb.formulas)
 

@@ -16,20 +16,7 @@ stages:
     response:
       status_code: 200
       body:
-        [
-          {
-            "id": 5,
-            "formula": "2+22+333"
-          },
-          {
-            "id": 6,
-            "formula": "2+22+89889"
-          },
-          {
-            "id": 7,
-            "formula": "2+22+89889"
-          }
-        ]
+        []
 
 ---
 
@@ -48,17 +35,4 @@ stages:
     response:
       status_code: 200
       body:
-        [
-          {
-            "id": 5,
-            "formula": "2+22+333"
-          },
-          {
-            "id": 6,
-            "formula": "2+22+89889"
-          },
-          {
-            "id": 7,
-            "formula": "2+22+89889"
-          }
-        ]
+        [ ]
