@@ -1,17 +1,5 @@
-"""djbackend URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+urls
 """
 from django.contrib import admin
 from django.urls import path
@@ -20,6 +8,8 @@ from .views import *
 urlpatterns = [
     path('', calculer, name='calculer'),
     path('<id>/', calculer_del, name='calculer_del'),
-    path('workbook/', workbook_create, name='wb_get'),
-    path('workbook/<id>/', workbook_edit, name='wb_edit'),
+
+    path('workbook/create', workbook_create, name='wb_get'),
+    path('workbook/edit/<id>/', workbook_edit, name='wb_edit'),
+    path('workbook/edit/<id_workbook>/<id_formula>/', workbook_edit_formula, name='wb_edit_formula'),
 ]

@@ -27,6 +27,7 @@ def calculer(request):
     return HttpResponse('tomek')
 
 def calculer_del(request, id):
+    """ delete or change particular formula """
     if request.method == 'DELETE':
         formula = Formula.objects.get(pk=id)
         formula.delete()
@@ -74,4 +75,33 @@ def workbook_edit(request, id):
         workbook.delete()
         return HttpResponse(status.HTTP_204_NO_CONTENT)
 
+    return HttpResponse(status.HTTP_400_BAD_REQUEST)
+
+def workbook_edit_formula(request, id_workbook, id_formula):
+    """
+    get - show particular formula
+    patch -change fomula
+    delete -delete particular formula
+
+    :param request:
+    :param id_workbook: workbook number
+    :param id_formula:  formula number
+    :return: status
+    """
+    workbook = Workbook.objects.get(pk=id_workbook)
+    formula = workbook.formula_set.get(pk=id_formula)
+
+    if request.method == 'GET':
+        serializer = FormulaSerializer(formula, many=False)
+        return JsonResponse(serializer.data, safe=False)
+
+    if request.method == 'PATCH':
+        requestdata = QueryDict(request.body)
+        formula.formula = requestdata.get('formula')
+        formula.save()
+        return HttpResponse(status.HTTP_200_OK)
+
+    if request.method == 'DELETE':
+        formula.delete()
+        return HttpResponse(status.HTTP_200_OK)
     return HttpResponse(status.HTTP_400_BAD_REQUEST)
