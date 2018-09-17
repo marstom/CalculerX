@@ -3,6 +3,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
+import json
 
 # Create your views here.
 from calculer.models import Formula, Workbook
@@ -31,7 +32,10 @@ def workbook_edit(request, id):
         return JsonResponse(serializer.data, safe=False)
     if request.method == 'POST':
         workbook = Workbook.objects.get(pk=id)
-        formula_text = request.POST.get('formula')
+        # formula_text = request.POST.get('formula')
+        # formula_text = request.body.decode('utf-8')
+        formula_text = json.loads(request.body).get('formula')
+        print(formula_text)
         formula = Formula.objects.create(formula=formula_text,
                                          workbook=workbook)
         return HttpResponse(status.HTTP_201_CREATED)
@@ -61,7 +65,9 @@ def workbook_edit_formula(request, id_workbook, id_formula):
         return JsonResponse(serializer.data, safe=False)
 
     if request.method == 'PATCH':
-        requestdata = QueryDict(request.body)
+        # requestdata = QueryDict(request.body)
+        requestdata = json.loads(request.body)
+        # import ipdb;ipdb.set_trace()
         formula.formula = requestdata.get('formula')
         formula.save()
         return HttpResponse(status.HTTP_200_OK)

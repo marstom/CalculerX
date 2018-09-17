@@ -1,5 +1,6 @@
 const eventBus = new Vue();
 
+
 Vue.component('my-formula', {
     template: `
         <div>
@@ -25,14 +26,14 @@ Vue.component('my-formula', {
             console.log('delete');
             console.log(this.value.id);
             var vm = this
-            axios.delete(`http://localhost:3000/calculer/${this.value.id}`)
+            axios.delete(`http://127.0.0.1:8000/calculer/workbook/edit/1/${this.value.id}/`)
             .then(response => {
                 console.log(response);
                 vm.$emit('deletedevent')
             })
         },
         performSave(){
-            axios.patch(`http://localhost:3000/calculer/${this.value.id}`, {formula:this.value.formula})
+            axios.patch(`http://127.0.0.1:8000/calculer/workbook/edit/1/${this.value.id}/`, {formula:this.value.formula})
             .then(response => {
                 console.log(response);
                 this.modified = false
@@ -76,7 +77,7 @@ new Vue({
         },
 
         refreshFormulas() {
-            axios.get('http://localhost:3000/calculer')
+            axios.get('http://127.0.0.1:8000/calculer/workbook/edit/1/')
                 .then(response => {
                     this.formulas = response.data
                     console.log(this.formulas)
@@ -85,7 +86,7 @@ new Vue({
 
         postFormula(){
             const f = splitFormula(this.formula)
-            axios.post('http://localhost:3000/calculer', {formula: f})
+            axios.post('http://127.0.0.1:8000/calculer/workbook/edit/1/', {formula: f})
             .then(response => {
                 console.log(response)
                 this.refreshFormulas()
