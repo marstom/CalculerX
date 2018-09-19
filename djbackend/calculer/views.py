@@ -46,6 +46,14 @@ def workbook_edit(request, id):
 
     return HttpResponse(status.HTTP_400_BAD_REQUEST)
 
+def workbook_list_view(request):
+    if request.method == 'GET':
+        workobooks = Workbook.objects.values_list('pk', flat=True)
+        workobooks = list(workobooks)
+        return JsonResponse(workobooks, safe=False)
+    return HttpResponse(status.HTTP_400_BAD_REQUEST)
+
+
 def workbook_edit_formula(request, id_workbook, id_formula):
     """
     get - show particular formula

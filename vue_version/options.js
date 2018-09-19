@@ -1,5 +1,48 @@
-const eventBus = new Vue();
+const eventBus = new Vue({
+    data(){
+        return{
+            workbook: 1
+        }
+    }
+});
 
+
+// eventBus.$on('selectWorkbook', (e) => {
+//     console.log('BUSSSS ', e)
+//     this.workbook = e
+//     eventBus.workbook = e
+// })
+
+Vue.component('my-select-workbook',{
+    template: `
+        <div>
+            <h3>Select workbook:</h3>
+            <div>
+                <input v-for="a in books_list" type="radio" name="a" id="a" @click="getWorkbook(a)">
+            </div>
+            <h3><span><i class="fa fa-plus-square-o add" aria-hidden="true"></i></span></h3>
+        </div>
+    `,
+
+    data(){
+        return{
+            books_list: [],
+            current: 0,
+        }
+    },
+    mounted(){
+        axios.get('http://127.0.0.1:8000/calculer/workbook/').then((response) => {
+            this.books_list = response.data
+        })
+    },
+    methods: {
+        getWorkbook(e){
+            console.log('book number -> ' , e)
+            eventBus.$emit('selectWorkbook', e)
+        }
+
+    }
+})
 
 Vue.component('my-formula', {
     template: `
@@ -12,10 +55,18 @@ Vue.component('my-formula', {
     data() {
         return {
             content: '',
-            modified: false
+            modified: false,
+            currentWorkbook: 1
         }
     },
     props: ['value',],
+    created(){
+        let vx = this
+        eventBus.$on('selectWorkbook', (e) => {
+            vx.currentWorkbook = e
+        })
+
+    },
     methods: {
         performSave() {
             console.log('save');
@@ -26,14 +77,14 @@ Vue.component('my-formula', {
             console.log('delete');
             console.log(this.value.id);
             var vm = this
-            axios.delete(`http://127.0.0.1:8000/calculer/workbook/edit/1/${this.value.id}/`)
+            axios.delete(`http://127.0.0.1:8000/calculer/workbook/edit/${this.currentWorkbook}/${this.value.id}/`)
             .then(response => {
                 console.log(response);
                 vm.$emit('deletedevent')
             })
         },
         performSave(){
-            axios.patch(`http://127.0.0.1:8000/calculer/workbook/edit/1/${this.value.id}/`, {formula:this.value.formula})
+            axios.patch(`http://127.0.0.1:8000/calculer/workbook/edit/${this.currentWorkbook}/${this.value.id}/`, {formula:this.value.formula})
             .then(response => {
                 console.log(response);
                 this.modified = false
@@ -47,6 +98,9 @@ Vue.component('my-formula', {
             
         }
     },
+    watch: {
+
+    }
 })
 
 
@@ -61,7 +115,17 @@ new Vue({
     data: {
         title: 'Options',
         formula: '',
-        formulas: []
+        formulas: [],
+        currentWorkbook: 1
+
+
+    },
+    created(){
+        let vx = this
+        eventBus.$on('selectWorkbook', (e) => {
+            vx.currentWorkbook = e
+            vx.refreshFormulas()
+        })
 
     },
     mounted() {
@@ -77,7 +141,7 @@ new Vue({
         },
 
         refreshFormulas() {
-            axios.get('http://127.0.0.1:8000/calculer/workbook/edit/1/')
+            axios.get(`http://127.0.0.1:8000/calculer/workbook/edit/${this.currentWorkbook}/`)
                 .then(response => {
                     this.formulas = response.data
                     console.log(this.formulas)
@@ -86,7 +150,7 @@ new Vue({
 
         postFormula(){
             const f = splitFormula(this.formula)
-            axios.post('http://127.0.0.1:8000/calculer/workbook/edit/1/', {formula: f})
+            axios.post(`http://127.0.0.1:8000/calculer/workbook/edit/${this.currentWorkbook}/`, {formula: f})
             .then(response => {
                 console.log(response)
                 this.refreshFormulas()
