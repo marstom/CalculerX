@@ -111,7 +111,7 @@ class SelectFormula {
     }
 
     getFormulasHttp(){
-        axios.get('http://localhost:3000/calculer')
+        axios.get('http://127.0.0.1:8000/calculer/workbook/edit/1/')
         .then(response => {
             this.formulas = response.data
         })

@@ -1,22 +1,33 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
+Base = declarative_base()
 
+class Workbook(Base):
+    __tablename__ = 'workbook'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    formulas = relationship('Formula')
 
-class Formula(db.Model):
-    __tablename__ = 'formulas'
-    id = db.Column(db.Integer, primary_key=True)
-    formula = db.Column(db.String)
+class Formula(Base):
+    __tablename__ = 'formula'
+    id = Column(Integer, primary_key=True)
+    formula = Column(String)
+    workbook_id = Column(Integer, ForeignKey('workbook.id'), default=0)
 
     def __repr__(self):
         return '{} {}'.format(self.id, self.formula)
 
 
-if __name__ == '__main__':
-    db.create_all()
+
+
+def initialize(name):
+    
+    from sqlalchemy.orm import sessionmaker
+    engine = create_engine(name, echo=False)
+    Base.metadata.create_all(engine)
 
 
     f1 = Formula(formula='2+2')
@@ -28,3 +39,19 @@ if __name__ == '__main__':
 
     for ins in Formula.query.all():
         print(ins.formula, ins.id)
+
+def clear(name):
+    from sqlalchemy.orm import sessionmaker
+    engine = create_engine(name, echo=False)
+    Base.metadata.create_all(engine)
+
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+
+    Base.metadata.drop_all(engine)
+    Base.metadata.create_all(engine)
+
+
+if __name__ == '__main__':
+    initialize('sqlite:///baz.db')

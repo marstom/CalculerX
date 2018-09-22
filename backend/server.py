@@ -12,24 +12,24 @@ http delete http://127.0.0.1:5000/calculer/1
 from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
-# from models import Formula
-from flask_sqlalchemy import SQLAlchemy
+from models import Base, Formula, initialize
 
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session, scoped_session
+from sqlalchemy import create_engine
+import os
+from database import init_db
 
 
-calc = [
-        {
-            'id':1,
-            'formula':'2+3+4',
-        },
-        {
-            'id':2,
-            'formula':'3+4+5',
-        },
-]
+os.environ['my_db'] = 'sqlite:///baz.db'
+# os.environ['my_db'] = 'sqlite:///ttt.db'
+# os.environ['my_db'] ='sqlite:///:memory:'
 
-id_ = 3
+engine = create_engine(os.environ['my_db'], echo=False)
+
+# must be scoped session otherwise not working
+session = scoped_session(sessionmaker(bind=engine))
+init_db()
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -47,76 +47,61 @@ class Formula(db.Model):
     def __repr__(self):
         return '{} {}'.format(self.id, self.formula)
 
+@app.teardown_request
+def remove_session(ex=None):
+    session.remove()
 
 class Calculer(Resource):
     def get(self):
-        calculs = []
-        for formula in Formula.query.all():
-            calculs.append(
+        calculus = []
+        for e in session.query(Formula).all():
+            calculus.append(
                 {
-                    'id': formula.id,
-                    'formula': formula.formula
+                    'id': e.id,
+                    'formula': e.formula
                 }
             )
-        return calculs, 200
+        return calculus, 200
 
     def post(self):
-        global id_
         parser = reqparse.RequestParser()
         parser.add_argument('formula')
         args = parser.parse_args()
         print(args)
 
-        calc.append(
-            {
-                'id':id_,
-                'formula': args['formula']
-            
-            })
-        id_+=1
-        formula = Formula(formula=args['formula'])
-        db.session.add(formula)
-        db.session.commit()
+        new_formula = Formula(formula=args['formula'])
+        session.add(new_formula)
+        session.commit()
 
 
-        return {'id': formula.id, 'formula': formula.formula}, 201
+        f=[{
+                'id':new_formula.id,
+                'formula': new_formula.formula
+            }]
+
+        return f, 201
 
 class CalculerOne(Resource):
     def delete(self, id):
         print(id)
-        self.pop_from_list(calc, int(id))
-        formula = Formula.query.get(int(id))
-        print(formula)
-        db.session.delete(formula)
-        db.session.commit()
-        return calc, 201
+        # self.pop_from_list(calc, int(id))
+        d = session.query(Formula).get(id)
+        session.delete(d)
+        session.commit()
+        print(d.formula)
+        return {'id':d.id, 'formula':d.formula}, 201
 
     def patch(self, id):
         parser = reqparse.RequestParser()
         parser.add_argument('formula')
         args = parser.parse_args()
-        print('patch -> ', id)
-        self.changeEl(calc, int(id), new=args['formula'])
 
-        return calc, 201
+        to_change = session.query(Formula).get(id)
+        to_change.formula = args['formula']
+        session.commit()
 
-    @staticmethod
-    def pop_from_list(lis, id):
-        for i, e in enumerate(lis):
-            if e['id'] == id:
-                lis.pop(i)
-                return i
-        return -1
+        return {}, 201
 
-    @staticmethod
-    def changeEl(lis, id, new):
-        for i, e in enumerate(lis):
-            if e['id'] == id:
-                temp = lis[i]
-                temp['formula'] = new
-                lis[i] = temp
-                return i
-        return -1
 
 api.add_resource(Calculer, '/calculer', endpoint='calculer')
 api.add_resource(CalculerOne, '/calculer/<id>', endpoint='calculerone')

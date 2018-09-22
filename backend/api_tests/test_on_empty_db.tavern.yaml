@@ -1,0 +1,45 @@
+---
+# Every test file has one or more tests...
+# Database must be empty !!!
+test_name: Empty db, create and watch
+
+# ...and each test has one or more stages (e.g. an HTTP request)
+stages:
+  - name: Make sure we have the right ID
+
+    # Define the request to be made...
+    request:
+      url: http://127.0.0.1:5000/calculer
+      method: GET
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body: []
+
+  - name: Make sure we have the right ID
+
+    # Define the request to be made...
+    request:
+      url: http://127.0.0.1:5000/calculer
+      method: POST
+      json:
+        formula: "3+4+5"
+
+  - name: Make sure we have the right ID
+
+    # Define the request to be made...
+    request:
+      url: http://127.0.0.1:5000/calculer
+      method: GET
+
+    # ...and the expected response code and body
+    response:
+      status_code: 200
+      body: 
+        [
+          {
+            'id': 1,
+            'formula': '3+4+5'
+            }
+        ]

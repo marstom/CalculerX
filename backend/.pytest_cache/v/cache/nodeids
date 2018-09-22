@@ -1,4 +1,5 @@
 [
   "test_base.py::test_db_create",
-  "test_base.py::test_db_create2"
+  "test_base.py::test_db_create2",
+  "test_base.py::test_db_relation"
 ]
