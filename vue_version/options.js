@@ -7,20 +7,14 @@ const eventBus = new Vue({
 });
 
 
-// eventBus.$on('selectWorkbook', (e) => {
-//     console.log('BUSSSS ', e)
-//     this.workbook = e
-//     eventBus.workbook = e
-// })
-
 Vue.component('my-select-workbook',{
     template: `
         <div>
             <h3>Select workbook:</h3>
             <div>
-                <input v-for="a in books_list" type="radio" name="a" id="a" @click="getWorkbook(a)">
+                <input v-for="a in books_list" type="radio" name="a" id="a" @click="selectWorkbook(a)">
             </div>
-            <h3><span><i class="fa fa-plus-square-o add" aria-hidden="true"></i></span></h3>
+            <h3 @click="addWorkbook"><span><i class="fa fa-plus-square-o add" aria-hidden="true"></i></span></h3>
         </div>
     `,
 
@@ -32,13 +26,34 @@ Vue.component('my-select-workbook',{
     },
     mounted(){
         axios.get('http://127.0.0.1:8000/calculer/workbook/').then((response) => {
-            this.books_list = response.data
+            this.books_list = response.data.workbooks
+            this.current = response.data.activeWorkbook
         })
     },
     methods: {
-        getWorkbook(e){
-            console.log('book number -> ' , e)
-            eventBus.$emit('selectWorkbook', e)
+        // select workbook radiobutton
+        selectWorkbook(e){
+            eventBus.workbook = this.current
+            axios.post('http://127.0.0.1:8000/calculer/workbook/', data={active: e}).then((response) => {
+                console.log('book number -> ' , e)
+                eventBus.$emit('selectWorkbook', e)
+                console.log(response.status);
+                
+            })
+        },
+        addWorkbook(){
+            console.log('Adding workbook');
+            axios.post('http://127.0.0.1:8000/calculer/workbook/create', {name: 'workbookX'}).then(() => {
+                this.reloadWorkbooks()
+            })
+            
+
+        },
+
+        reloadWorkbooks(){
+            axios.get('http://127.0.0.1:8000/calculer/workbook/').then((response) => {
+                this.books_list = response.data
+            })
         }
 
     }
@@ -61,18 +76,13 @@ Vue.component('my-formula', {
     },
     props: ['value',],
     created(){
-        let vx = this
-        eventBus.$on('selectWorkbook', (e) => {
-            vx.currentWorkbook = e
+        this.readCurrentWorkbook()
+        eventBus.$on('selectWorkbook', () =>{
+            // everytime when i change radiobutton!
+            this.readCurrentWorkbook()
         })
-
     },
     methods: {
-        performSave() {
-            console.log('save');
-
-
-        },
         performDelete() {
             console.log('delete');
             console.log(this.value.id);
@@ -96,11 +106,16 @@ Vue.component('my-formula', {
         hello(){
             console.log('event trigger et my-formula');
             
+        },
+        readCurrentWorkbook(){
+            axios.get('http://127.0.0.1:8000/calculer/workbook/').then((response) => {
+                this.currentWorkbook = response.data.activeWorkbook
+            })
         }
     },
-    watch: {
+    computed:{
 
-    }
+    },
 })
 
 
@@ -121,15 +136,16 @@ new Vue({
 
     },
     created(){
+        this.readCurrentWorkbook()
         let vx = this
         eventBus.$on('selectWorkbook', (e) => {
             vx.currentWorkbook = e
             vx.refreshFormulas()
         })
 
+
     },
     mounted() {
-        this.refreshFormulas()
     },
     methods: {
         submit() {
@@ -160,6 +176,12 @@ new Vue({
         hello(){
             console.log('log from root');
             
+        },
+        readCurrentWorkbook(){
+            axios.get('http://127.0.0.1:8000/calculer/workbook/').then((response) => {
+                this.currentWorkbook = response.data.activeWorkbook
+                this.refreshFormulas()
+            })
         }
 
     },

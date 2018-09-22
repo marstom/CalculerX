@@ -6,14 +6,14 @@ from rest_framework import status
 import json
 
 # Create your views here.
-from calculer.models import Formula, Workbook
+from calculer.models import Formula, Workbook, ApplicationState
 from .serializers import *
 
 
 def workbook_create(request):
     """ New empty workbook creation """
     if request.method == 'POST':
-        name = request.POST.get('name')
+        name = json.loads(request.body).get('name')
         Workbook.objects.create(name=name)
         return JsonResponse(status.HTTP_201_CREATED, safe=False)
     return HttpResponse(status.HTTP_400_BAD_REQUEST)
@@ -47,10 +47,23 @@ def workbook_edit(request, id):
     return HttpResponse(status.HTTP_400_BAD_REQUEST)
 
 def workbook_list_view(request):
+    if ApplicationState.objects.count() != 1:
+        ApplicationState.objects.create(active_workbook=2)
     if request.method == 'GET':
         workobooks = Workbook.objects.values_list('pk', flat=True)
+        active_workbook = ApplicationState.objects.get()
         workobooks = list(workobooks)
-        return JsonResponse(workobooks, safe=False)
+        resp = {
+            'activeWorkbook': active_workbook.active_workbook,
+            'workbooks': workobooks,
+        }
+        return JsonResponse(resp, safe=False)
+    if request.method == 'POST':
+        active_workbook = ApplicationState.objects.get()
+        active = json.loads(request.body).get('active')
+        active_workbook.active_workbook = active
+        active_workbook.save()
+        return HttpResponse(status.HTTP_200_OK)
     return HttpResponse(status.HTTP_400_BAD_REQUEST)
 
 

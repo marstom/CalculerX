@@ -2,6 +2,10 @@ from django.db import models
 
 # Create your models here.
 
+class ApplicationState(models.Model):
+    """ application state keep in this table """
+    active_workbook = models.IntegerField()
+
 class Workbook(models.Model):
     name = models.CharField(max_length=50)
 
