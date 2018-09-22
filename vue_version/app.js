@@ -93,7 +93,7 @@ Vue.component('math-formula', {
 })
 
 class SelectFormula {
-    constructor() {
+    constructor(current_workbook) {
         // this.formulas = [
         //     '2 + 12 + 2',
         //     '3 - 12 + 3',
@@ -107,11 +107,13 @@ class SelectFormula {
             id:0,
             formula: "2+1"
         }]
-        this.getFormulasHttp()
+        this.getFormulasHttp(current_workbook)
     }
 
-    getFormulasHttp(){
-        axios.get('http://127.0.0.1:8000/calculer/workbook/edit/1/')
+    getFormulasHttp(current_workbook){
+        console.log(`load workbook ${current_workbook}`);
+        
+        axios.get(`http://127.0.0.1:8000/calculer/workbook/edit/${current_workbook}/`)
         .then(response => {
             this.formulas = response.data
         })
@@ -136,8 +138,12 @@ new Vue({
         ]
     },
     mounted() {
-        this.sf = new SelectFormula()
-        this.currentFormula = this.sf.getRandomFormula()
+        let current_workbook = null
+        axios.get('http://127.0.0.1:8000/calculer/workbook/').then((response) => {
+            current_workbook = response.data.activeWorkbook
+            this.sf = new SelectFormula(current_workbook)
+            this.currentFormula = this.sf.getRandomFormula()
+        })
     },
 
     methods: {
