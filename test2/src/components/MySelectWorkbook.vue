@@ -13,7 +13,11 @@
 
 <script>
 import axios from 'axios'
+import Vue from 'vue'
+import eventBus from '../event-bus.js'
+
     export default {
+    name:'my-select-workbook',
     data(){
         return{
             books_list: [],
@@ -30,7 +34,8 @@ import axios from 'axios'
         // select workbook radiobutton
         selectWorkbook(e){
             eventBus.workbook = this.current
-            axios.post('http://127.0.0.1:8000/calculer/workbook/', data={active: e}).then((response) => {
+            console.log(e)
+            axios.post('http://127.0.0.1:8000/calculer/workbook/', {active: e}).then((response) => {
                 console.log('book number -> ' , e)
                 this.current = e
                 eventBus.$emit('selectWorkbook', e)

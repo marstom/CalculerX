@@ -23,6 +23,11 @@ export default new Router({
       path:'/meview',
       name: 'me',
       component: () => import('./views/Me.vue')
+    },
+    {
+      path:'/options',
+      name: 'options',
+      component: () => import('./views/Options.vue')
     }
   ]
 })

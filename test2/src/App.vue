@@ -1,13 +1,15 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+      <router-link to="/">Calculer</router-link> |
+      <router-link to="/options">Options</router-link> | 
       <router-link to="/about">About</router-link> | 
       <router-link to="/meview">Me :D</router-link>
     </div>
     <router-view/>
   </div>
 </template>
+
 
 <style lang="scss">
 #app {
