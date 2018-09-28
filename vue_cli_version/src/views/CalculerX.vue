@@ -161,10 +161,9 @@ input[type=text] {
     outline: none;
     font-size: 40px;
     background-color: #d9fcff;
-}
-
-input[type=text]:focus {
-    background-color: lightblue;
+    &:focus{
+        background-color: lightblue;
+    }
 }
 
 
@@ -177,16 +176,75 @@ input[type=button], input[type=submit], input[type=reset] {
     cursor: pointer;
     padding: 30px 40px 18px;
     margin-bottom: 10px;
+
+    &:hover{
+        background-color: rgb(78, 202, 82);
+    }
 }
 
-input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
-    background-color: rgb(78, 202, 82);
-    font-size: 20px;
-    border: none;
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-    padding: 30px 40px 18px;
-    margin-bottom: 10px;
+
+
+.add {
+    color: rgb(35, 99, 35);
 }
+
+.add:hover {
+    color: rgb(60, 173, 60);
+}
+
+.options{
+    color: rebeccapurple;
+    width: 40px;
+    font-size: 50px;
+    position: absolute;
+    right: 200px;
+    top: 100px;
+}
+
+.options:hover{
+    color: rgb(141, 73, 209);
+    width: 40px;
+    font-size: 50px;
+    position: absolute;
+    right: 200px;
+    top: 100px;
+
+}
+.options:active{
+    color: rgb(73, 209, 146);
+    width: 40px;
+    font-size: 50px;
+    position: absolute;
+    right: 200px;
+    top: 100px;
+
+}
+
+/*  in options tab */
+
+.oper{
+    height: 67px;
+    width: 590px !important;
+    font-size: 25px !important;
+}
+
+.bsave{
+    background-color:rgb(32, 161, 161) !important;
+}
+.bsave:hover{
+    background-color:rgb(41, 182, 182) !important;
+}
+
+.bdelete{
+    background-color:rgb(216, 78, 78) !important;
+}
+.bdelete:hover{
+    background-color:rgb(228, 81, 81) !important;
+}
+
+.modified{
+    background-color: rgb(74, 224, 230) !important;
+}
+
+
 </style>

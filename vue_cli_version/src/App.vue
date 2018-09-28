@@ -1,6 +1,10 @@
 <template>
   <div id="app">
     <div id="nav">
+      <!-- additional linkst to styles -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
       <router-link to="/">Calculer</router-link> |
       <router-link to="/options">Options</router-link> | 
       <router-link to="/about">About</router-link> | 
