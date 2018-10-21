@@ -1,6 +1,7 @@
 <template>
     <div>
         <h3>Select workbook:</h3>
+        <my-radio-button></my-radio-button>
         <div>
             <input v-for="a in books_list" type="radio" name="a" id="a" @click="selectWorkbook(a)">
         </div>
@@ -15,8 +16,10 @@
 import axios from 'axios'
 import Vue from 'vue'
 import eventBus from '../event-bus.js'
+import MyRadioButton from '@/components/MyRadioButton.vue'
 
     export default {
+    components:{MyRadioButton},
     name:'my-select-workbook',
     data(){
         return{

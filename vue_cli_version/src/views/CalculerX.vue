@@ -166,7 +166,6 @@ input[type=text] {
     }
 }
 
-
 input[type=button], input[type=submit], input[type=reset] {
     background-color: #4CAF50;
     font-size: 20px;
@@ -174,8 +173,9 @@ input[type=button], input[type=submit], input[type=reset] {
     color: white;
     text-decoration: none;
     cursor: pointer;
-    padding: 30px 40px 18px;
+    padding: 31px 40px 17px;
     margin-bottom: 10px;
+    margin: 1px;
 
     &:hover{
         background-color: rgb(78, 202, 82);
@@ -184,14 +184,16 @@ input[type=button], input[type=submit], input[type=reset] {
 
 
 
+// plusiki
 .add {
     color: rgb(35, 99, 35);
+    &:hover{
+        color: rgb(60, 173, 60);
+    }
 }
 
-.add:hover {
-    color: rgb(60, 173, 60);
-}
 
+// koperta
 .options{
     color: rebeccapurple;
     width: 40px;
@@ -199,26 +201,26 @@ input[type=button], input[type=submit], input[type=reset] {
     position: absolute;
     right: 200px;
     top: 100px;
+    &:hover{
+        color: rgb(141, 73, 209);
+        width: 40px;
+        font-size: 50px;
+        position: absolute;
+        right: 200px;
+        top: 100px;
+
+    }
+    &:active{
+        color: rgb(73, 209, 146);
+        width: 40px;
+        font-size: 50px;
+        position: absolute;
+        right: 200px;
+        top: 100px;
+
+    }
 }
 
-.options:hover{
-    color: rgb(141, 73, 209);
-    width: 40px;
-    font-size: 50px;
-    position: absolute;
-    right: 200px;
-    top: 100px;
-
-}
-.options:active{
-    color: rgb(73, 209, 146);
-    width: 40px;
-    font-size: 50px;
-    position: absolute;
-    right: 200px;
-    top: 100px;
-
-}
 
 /*  in options tab */
 
@@ -230,16 +232,16 @@ input[type=button], input[type=submit], input[type=reset] {
 
 .bsave{
     background-color:rgb(32, 161, 161) !important;
-}
-.bsave:hover{
-    background-color:rgb(41, 182, 182) !important;
+    &:hover{
+        background-color:rgb(41, 182, 182) !important;
+    }
 }
 
 .bdelete{
     background-color:rgb(216, 78, 78) !important;
-}
-.bdelete:hover{
-    background-color:rgb(228, 81, 81) !important;
+    &:hover{
+        background-color:rgb(228, 81, 81) !important;
+    }
 }
 
 .modified{
